@@ -139,8 +139,37 @@ void showMoviesByActor(Movie movies[], int num_movies, Actor actors[], int num_a
 }
 
 void reportActorsByDirector(Movie movies[], int num_movies, Actor actors[], int num_actors) {
-    // TODO: Se ha de solicitar el nombre del director y crear un fichero de texto llamado "reportABD.txt" con el nombre
-    //  de los actores que participen en las películas dirigidas por dicho director
+    char director[MAX_TXT];
+    FILE *f = fopen("reportABD.txt", "w");
+
+    if (!f) {
+        printf("Could not open file.\n");
+        return;
+    }
+
+    printf("Enter director name: ");
+    getchar();
+    fgets(director, MAX_TXT, stdin);
+    director[strcspn(director, "\n")] = 0;
+
+    int used_ids[MAX_ACTORS] = {0};
+
+    for (int i = 0; i < num_movies; i++) {
+        if (strcmp(movies[i].director, director) == 0) {
+            for (int j = 0; j < movies[i].nb_actors; j++) {
+                int id = movies[i].actors_ids[j];
+                if (!used_ids[id]) {
+                    char name[MAX_TXT];
+                    getNameById(actors, num_actors, name, id);
+                    fprintf(f, "%s\n", name);
+                    used_ids[id] = 1;
+                }
+            }
+        }
+    }
+
+    fclose(f);
+    printf("Report saved to reportABD.txt\n");
 }
 
 int deleteMovieByYear(Movie movies[], int num_movies) {
