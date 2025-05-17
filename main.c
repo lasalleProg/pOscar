@@ -113,7 +113,29 @@ void getNameById(Actor actors[], int num_actors, char name[], int id){
 }
 
 void showMoviesByActor(Movie movies[], int num_movies, Actor actors[], int num_actors) {
-    //TODO: Se ha de solicitar el nombre del actor y mostrar el listado de películas que son protegonizadas por el mismo.
+    char actor_name[MAX_TXT];
+    int actor_id;
+
+    printf("Enter actor name: ");
+    getchar();
+    fgets(actor_name, MAX_TXT, stdin);
+    actor_name[strcspn(actor_name, "\n")] = 0;
+
+    actor_id = getIdByName(actors, num_actors, actor_name);
+    if (actor_id == -1) {
+        printf("Actor not found.\n");
+        return;
+    }
+
+    printf("Movies with actor %s:\n", actor_name);
+    for (int i = 0; i < num_movies; i++) {
+        for (int j = 0; j < movies[i].nb_actors; j++) {
+            if (movies[i].actors_ids[j] == actor_id) {
+                printf("- %s (%d)\n", movies[i].title, movies[i].year);
+                j = movies[i].nb_actors; // emula el break
+            }
+        }
+    }
 }
 
 void reportActorsByDirector(Movie movies[], int num_movies, Actor actors[], int num_actors) {
