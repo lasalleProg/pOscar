@@ -94,7 +94,12 @@ int addMovies(Movie movies[MAX_MOVIES]) {
 }
 
 int getIdByName(Actor actors[], int num_actors, char name[]){
-    //TODO: Dado un nombre entrado por parámetro, buscar y devolver el id del actor correspondiente al mismo.
+    for (int i = 0; i < num_actors; i++) {
+        if (strcmp(actors[i].name, name) == 0) {
+            return actors[i].id;
+        }
+    }
+    return -1;
 }
 
 void getNameById(Actor actors[], int num_actors, char name[], int id){
