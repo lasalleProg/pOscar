@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_TXT 80
 #define MAX_ACTORS 100
@@ -189,7 +190,24 @@ int deleteMovieByYear(Movie movies[], int num_movies) {
 }
 
 void reportCurrentMovies(Movie movies[], int num_movies) {
-    // TODO: Se ha de crear un fichero de binario llamado "reportCM.bin" con las pelñiculas que solo pertenezcan al año actual
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    int current_year = tm.tm_year + 1900;
+
+    FILE *f = fopen("reportCM.bin", "wb");
+    if (!f) {
+        printf("Could not open binary file.\n");
+        return;
+    }
+
+    for (int i = 0; i < num_movies; i++) {
+        if (movies[i].year == current_year) {
+            fwrite(&movies[i], sizeof(Movie), 1, f);
+        }
+    }
+
+    fclose(f);
+    printf("Report saved to reportCM.bin\n");
 }
 
 int main() {
