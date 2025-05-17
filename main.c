@@ -19,8 +19,29 @@ typedef struct{
 }Movie;
 
 int addActors(Actor actors[MAX_ACTORS]) {
-    //TODO: Solicitar el id y nombre del actor y añadirlo al arreglo. Habrá que preguntarle al usuario si se desea
-    // añadir más actores al arreglo, en caso contrario volver al menú principal. Se devuelve la cantidad de actores entrados al arreglo.
+    int count = 0;
+    char choice;
+
+    do {
+        printf("Enter actor ID: ");
+        scanf("%d", &actors[count].id);
+        getchar(); 
+        printf("Enter actor name: ");
+        fgets(actors[count].name, MAX_TXT, stdin);
+        actors[count].name[strcspn(actors[count].name, "\n")] = 0; // elimina el salto de línea
+
+        count++;
+
+        if (count >= MAX_ACTORS) {
+            printf("Maximum number of actors reached.\n");
+            break;
+        }
+
+        printf("Add another actor? (y/n): ");
+        scanf(" %c", &choice);
+    } while (choice == 'y' || choice == 'Y');
+
+    return count;
 }
 
 int addMovies(Movie movies[MAX_MOVIES]) {
